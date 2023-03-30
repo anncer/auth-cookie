@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "composite": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "target": "es2015",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "strict": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "declarationDir": "types",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["node"]
+  }
+}

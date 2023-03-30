@@ -1,0 +1,1 @@
+npm publish --registry http://10.122.163.225:8081/repository/npm-repo-hostd/
