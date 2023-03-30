@@ -1,17 +1,12 @@
-import {isObject, isString, isCookie} from './utils'
-
-
-type CacheTe = "localStorage" | "sessionStorage" | "cookie";
-interface FormProps {
-  [name: string]: any
-}
-
-type mixinsArgs = CacheTe | FormProps | undefined
+import {__assign, __isCache, __isObject} from './utils'
+import type { LocalParams, CookieProps, CookieUnknow } from './types'
+import { __setStorage, __getStorage, __clearStorage, __removeStorage } from './storage';
+import {__setCookie, __getCookie, __clearCookie} from './cookie'
 
 class LocalCache {
 
-  defaultType : CacheTe;
-  defaultAttrs: any;
+  defaultType : LocalParams;
+  defaultAttrs: CookieProps;
 
   constructor() {
     this.defaultType = 'cookie'
@@ -21,71 +16,64 @@ class LocalCache {
   }
 
   // 获取需要更改的缓存类型
-  private getType (t1: any , t2: any ): CacheTe {
-    if (t1 && isCookie(t1)) {
+  private getType (t1: any , t2: any ): LocalParams {
+    if (t1 && __isCache(t1)) {
       return t1
-    } else if (t2 && isCookie(t2)){
+    } else if (t2 && __isCache(t2)){
       return t2
     }
     return this.defaultType
   }
 
   // 获取缓存的设置参数
-  private getAttrs (t1: mixinsArgs , t2: mixinsArgs ):FormProps {
-    return isObject(t1)
+  private getAttrs (t1: any , t2: any ): CookieProps {
+    return __isObject(t1)
         ? t1 
-        : isObject(t2)
+        : __isObject(t2)
           ? t2 
           : this.defaultAttrs
   }
 
-  set(name: string, value: any, t?: CacheTe | FormProps, attrs?: CacheTe | FormProps ) {
+  set(name: string | number, value: any, t?: CookieUnknow, attrs?: CookieUnknow ) {
+
+    if (!name) {return}
+
+    let key = name && typeof name === "string" ? name : String(name)
+
+    key = encodeURIComponent(key)
+      .replace(/%(2[346B]|5E|60|7C)/g, decodeURIComponent)
+      .replace(/[()]/g, escape)
+
     let type  = this.getType(t, attrs)
     const params = this.getAttrs(t, attrs)
-     if (type === "cookie") {
-      // Cookies.set(key, value);
-    } else {
-      window[type].setItem(name, JSON.stringify(value));
-    }
-  }
-
-  get(name: string, type: CacheTe = "cookie") {
-    let value: any = "";
     if (type === "cookie") {
-      // value = Cookies.get(key);
+      __setCookie(key, value, __assign({}, this.defaultAttrs, params))
     } else {
-      value = window[type].getItem(name) || "";
-    }
-
-    return value
-  }
-
-  clear(type: CacheTe = "cookie") {
-    if (type === "cookie") {
-      document.cookie
-        .split(";")
-        .forEach(
-          (cookie) =>
-            (document.cookie = cookie
-              .replace(/^ +/, "")
-              .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`))
-        );
-    } else {
-      window[type].clear();
+      __setStorage(key, value, type)
     }
   }
 
-  remove (key: string, type: CacheTe = "cookie") {
-    if (type === "cookie") {
-      // Cookies.remove(key);
-    } else {
-      window[type].removeItem(key);
-    }
+  get (key: string, type:LocalParams = "cookie") {
+
+    if (!key) {return}
+
+    return type === "cookie" ? __getCookie(key) : __getStorage(key, type)
   }
 
-  delete(key: string, type: CacheTe = "cookie") {
-    this.remove(key, type)
+  remove (key: string, type: LocalParams = "cookie", attrs: CookieProps) {
+
+    type === "cookie"
+      ? (__setCookie(key, '', __assign({}, attrs, { expires: -1 })))
+      : (__removeStorage(key, type))
   }
+
+  clear(type: LocalParams = "cookie") {
+
+    type === "cookie" 
+      ? (__clearCookie())
+      : (__clearStorage(type))
+  }
+
 }
 
 export default new LocalCache();

@@ -1,13 +1,19 @@
+import { CookieProps } from './types'
 
-export function isObject(obj: any) {
+export const __isObject = function(obj: any) {
   return Object.prototype.toString.call(obj) === "[object Object]";
 }
 
-export function isString(str: any) {
-
-  return typeof str === "string" || str instanceof String
+export const __isCache = function(str: any): boolean {
+  return ["localStorage", "sessionStorage", "cookie"].includes(str)
 }
 
-export function isCookie(str: any): boolean {
-  return ["localStorage", "sessionStorage", "cookie"].includes(str)
+export const __assign = function (target: CookieProps, ...args: CookieProps[]) {
+  for (let i = 0; i < args.length; i++) {
+    const source = args[i]
+    for (let key in source) {
+      target[key] = source[key]
+    }
+  }
+  return target
 }

@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "composite": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "target": "es2015",
     "moduleResolution": "node",
     "jsx": "preserve",
     "strict": true,
+    "incremental": false,
     "resolveJsonModule": true,
     "declaration": true,
     "esModuleInterop": true,

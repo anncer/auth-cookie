@@ -12,74 +12,59 @@ const external = [...Object.keys(pkg.devDependencies)];
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const createOutput = () => {
-  const output = [
-    {
-      file: pkg.module,
-      format: "es",
-      sourcemap: false,
-    }
-  ];
-  // if (!isDev) {
-    output.push({
-      file: pkg.main,
-      exports: "named",
-      format: "cjs",
-      sourcemap: false,
-    });
-    output.push({
-      file: "dist/index.global.js",
-      name: "compool",
-      format: "iife",
-      sourcemap: false,
-    });
-
-    output.push({
-      format: "umd",
-      name: "compool",
-      file: `dist/index.min.js`,
-      plugins: [terser()]
-    })
-  // }
-  return output;
-};
-
-export default () => {
-  const rollupOptions = [
-    {
-      input: path.resolve(__dirname, "src/index.ts"),
-      external,
-      cache: false,
-      output: createOutput(false),
-      plugins: [
-        nodeResolve(),
-        commonjs(),
-        json(),
-        typescript({
-          // must specify tsconfig pathname
-          tsconfig: path.resolve(__dirname, "tsconfig.node.json"),
-          compilerOptions: {
-            sourceMap: false,
-            // https://github.com/Swatinem/rollup-plugin-dts/issues/147
-            declarationDir: false ? undefined : "./types",
-            declaration: true,
-          },
-        }),
-      ],
-    },
-  ];
-  // if (isProd) {
-    rollupOptions.push({
-      input: "./dist/types/src/index.d.ts",
-      output: [
-        {
-          file: "dist/index.d.ts",
-          format: "es",
-        },
-      ],
-      plugins: [dts()],
-    });
-   
-  // }
-  return rollupOptions;
-};
+export default [
+  {
+    input: path.resolve(__dirname, "src/index.ts"),
+    external,
+    cache: false,
+    output: [
+      {
+        file: pkg.module,
+        format: "es",
+        sourcemap: false,
+      },
+      {
+        file: pkg.main,
+        exports: "named",
+        format: "cjs",
+        sourcemap: false,
+      },
+      {
+        file: "dist/index.global.js",
+        name: "autoCookie",
+        format: "iife",
+        sourcemap: false,
+      },
+      {
+        format: "umd",
+        name: "autoCookie",
+        file: `dist/index.min.js`,
+        plugins: [terser()]
+      }
+    ],
+    plugins: [
+      nodeResolve(),
+      commonjs(),
+      typescript({
+        // must specify tsconfig pathname
+        tsconfig: path.resolve(__dirname, "tsconfig.node.json"),
+        compilerOptions: {
+          // https://github.com/Swatinem/rollup-plugin-dts/issues/147
+          declarationDir: false ? undefined : "./types",
+          declaration: true,
+        }
+      }),
+    ],
+  },
+  {
+    input: "./dist/types/index.d.ts",
+    cache: false,
+    output: [
+      {
+        file: "dist/index.d.ts",
+        format: "es",
+      },
+    ],
+    plugins: [dts()],
+  }
+]
