@@ -1,3 +1,3 @@
-# compool
+# auto-cookie
 
-A js tools libary
+for brower cookie localStorare sessionStorage using easy
