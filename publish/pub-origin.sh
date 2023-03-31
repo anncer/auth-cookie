@@ -1,1 +1,1 @@
-npm publish --registry https://www.npmjs.com/
+npm publish --registry https://registry.npmjs.org/

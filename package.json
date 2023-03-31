@@ -1,6 +1,6 @@
 {
-  "name": "auto-cookie",
-  "version": "0.0.1",
+  "name": "auth-cookie",
+  "version": "0.1.1",
   "description": "a js tools library for cookie",
   "module": "dist/index.es.js",
   "main": "dist/index.cjs.js",
@@ -15,7 +15,15 @@
     "build:types": "tsc --declaration --emitDeclarationOnly",
     "ts-check": "tsc -p tsconfig.json --noEmit",
     "build": "rimraf dist && rollup --config rollup.config.js && rimraf dist/types",
-    "pub": "sh ./publish/pub-origin.sh"
+    "pub:npm": "sh ./publish/pub-origin.sh",
+    "pub:host": "sh ./publish/pub-host.sh"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anncer/auth-cookie"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.1",
