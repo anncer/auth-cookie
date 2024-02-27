@@ -1,5 +1,5 @@
 # auto-cookie
 
-for brower cookie localStorare sessionStorage using easy
+easy using for brower cookie localStorare sessionStorage 
 
 <!-- <https://blog.csdn.net/iamxuqianqian/article/details/115969728> -->
