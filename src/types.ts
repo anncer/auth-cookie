@@ -10,4 +10,4 @@ export interface CookieProps {
   [name: string]: any
 }
 
-export type CookieUnknow = LocalParams | CookieProps | undefined
+export type CookieUnknow = LocalParams

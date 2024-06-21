@@ -16,25 +16,21 @@ class LocalCache {
   }
 
   // 获取需要更改的缓存类型
-  private getType (t1: any , t2: any ): LocalParams {
+  private getType (t1: any): LocalParams {
     if (t1 && __isCache(t1)) {
       return t1
-    } else if (t2 && __isCache(t2)){
-      return t2
     }
     return this.defaultType
   }
 
   // 获取缓存的设置参数
-  private getAttrs (t1: any , t2: any ): CookieProps {
+  private getAttrs (t1: any): CookieProps {
     return __isObject(t1)
-        ? t1 
-        : __isObject(t2)
-          ? t2 
-          : this.defaultAttrs
+        ? t1
+        : this.defaultAttrs
   }
 
-  set(name: string | number, value: any, t?: CookieUnknow, attrs?: CookieUnknow ) {
+  set(name: string | number, value: any, t?: LocalParams, attrs?: CookieProps ) {
 
     if (!name) {return}
 
@@ -44,8 +40,8 @@ class LocalCache {
       .replace(/%(2[346B]|5E|60|7C)/g, decodeURIComponent)
       .replace(/[()]/g, escape)
 
-    let type  = this.getType(t, attrs)
-    const params = this.getAttrs(t, attrs)
+    let type  = this.getType(t)
+    const params = this.getAttrs(attrs)
     if (type === "cookie") {
       __setCookie(key, value, __assign({}, this.defaultAttrs, params))
     } else {
@@ -69,7 +65,7 @@ class LocalCache {
 
   clear(type: LocalParams = "cookie") {
 
-    type === "cookie" 
+    type === "cookie"
       ? (__clearCookie())
       : (__clearStorage(type))
   }

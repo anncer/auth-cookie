@@ -9,7 +9,7 @@ export const __setCookie = function (key: string, value: any, attrs: CookieProps
     if (typeof attributes.expires === 'number') {
       attributes.expires = new Date(Date.now() + attributes.expires * 864e5)
     }
-    
+
     if (attributes.expires) {
       attributes.expires = attributes.expires.toUTCString()
     }
@@ -27,9 +27,9 @@ export const __setCookie = function (key: string, value: any, attrs: CookieProps
       }
       stringifiedAttributes += '=' + attributes[attributeName].split(';')[0]
     }
-
+    const _value = converter.write(value)
     return (document.cookie =
-      key + '=' + converter.write(value) + stringifiedAttributes)
+      key + '=' +_value + stringifiedAttributes)
 }
 
 export const __getCookie = function (key: string) {
