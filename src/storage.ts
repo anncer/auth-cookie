@@ -7,7 +7,9 @@ import converter from './converter'
     window[type].setItem(key, converter.write(JSON.stringify(value)));
   }
   export const __getStorage = function ( key: string, type: StorageParams) {
+
     if (typeof(Storage) === "undefined") { return }
+
     return converter.read(window[type].getItem(key) || "")
   }
 

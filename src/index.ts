@@ -30,7 +30,7 @@ class LocalCache {
         : this.defaultAttrs
   }
 
-  set(name: string | number, value: any, t?: LocalParams, attrs?: CookieProps ) {
+  set(name: string | number, value: any, type?: LocalParams, attrs?: CookieProps ) {
 
     if (!name) {return}
 
@@ -40,27 +40,34 @@ class LocalCache {
       .replace(/%(2[346B]|5E|60|7C)/g, decodeURIComponent)
       .replace(/[()]/g, escape)
 
-    let type  = this.getType(t)
+    let _type  = this.getType(type)
     const params = this.getAttrs(attrs)
-    if (type === "cookie") {
+    if (_type === "cookie") {
       __setCookie(key, value, __assign({}, this.defaultAttrs, params))
     } else {
-      __setStorage(key, value, type)
+      __setStorage(key, value, _type)
     }
   }
 
-  get (key: string, type:LocalParams = "cookie") {
+  get (key: string, type?:LocalParams) {
 
     if (!key) {return}
 
-    return type === "cookie" ? __getCookie(key) : __getStorage(key, type)
+    let _type  = this.getType(type)
+
+    return _type === "cookie" ? __getCookie(key) : __getStorage(key, _type)
   }
 
-  remove (key: string, type: LocalParams = "cookie", attrs: CookieProps) {
+  remove (key: string, type ?:LocalParams, attrs?: CookieProps ) {
 
-    type === "cookie"
-      ? (__setCookie(key, '', __assign({}, attrs, { expires: -1 })))
-      : (__removeStorage(key, type))
+    let _type  = this.getType(type)
+
+    const params = this.getAttrs(attrs)
+
+    _type === "cookie"
+    ? (__setCookie(key, '', __assign({}, params, { expires: -1 })))
+    : (__removeStorage(key, _type))
+
   }
 
   clear(type: LocalParams = "cookie") {
