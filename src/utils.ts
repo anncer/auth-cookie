@@ -1,4 +1,4 @@
-import { CookieProps } from './types'
+import type { CookieProps } from './types'
 
 export const __isObject = function(obj: any) {
   return Object.prototype.toString.call(obj) === "[object Object]";

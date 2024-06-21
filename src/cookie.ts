@@ -1,10 +1,11 @@
 import type { CookieProps } from './types'
 import converter from './converter'
 
-export const __setCookie = function (key: string, value: any, attrs: CookieProps) {
-    if (document && document.cookie) { return }
+export const __setCookie = function (key: string, value: any, attributes: CookieProps) {
 
-    const attributes:any = { value: Object.freeze(attrs) }
+    if (typeof document === 'undefined') {
+      return
+    }
 
     if (typeof attributes.expires === 'number') {
       attributes.expires = new Date(Date.now() + attributes.expires * 864e5)
@@ -15,6 +16,7 @@ export const __setCookie = function (key: string, value: any, attrs: CookieProps
     }
 
     let stringifiedAttributes = ''
+
     for (let attributeName in attributes) {
       if (!attributes[attributeName]) {
         continue
@@ -27,12 +29,17 @@ export const __setCookie = function (key: string, value: any, attrs: CookieProps
       }
       stringifiedAttributes += '=' + attributes[attributeName].split(';')[0]
     }
+
     const _value = converter.write(value)
+
     return (document.cookie =
       key + '=' +_value + stringifiedAttributes)
 }
 
 export const __getCookie = function (key: string) {
+  if (typeof document === 'undefined' || (arguments.length && !key)) {
+    return
+  }
   const cookies = document.cookie ? document.cookie.split('; ') : []
   const jar:any = {}
 

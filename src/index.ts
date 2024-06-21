@@ -1,5 +1,5 @@
 import {__assign, __isCache, __isObject} from './utils'
-import type { LocalParams, CookieProps, CookieUnknow } from './types'
+import type { LocalParams, CookieProps } from './types'
 import { __setStorage, __getStorage, __clearStorage, __removeStorage } from './storage';
 import {__setCookie, __getCookie, __clearCookie} from './cookie'
 
