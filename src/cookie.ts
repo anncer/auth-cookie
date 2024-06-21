@@ -60,7 +60,9 @@ export const __getCookie = function (key: string) {
 }
 
 export const __clearCookie = function () {
-  if (document && document.cookie) { return }
+  if (typeof document === 'undefined') {
+    return
+  }
   document.cookie
     .split(";")
     .forEach(
